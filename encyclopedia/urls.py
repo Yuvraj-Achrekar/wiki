@@ -9,4 +9,5 @@ urlpatterns = [
     path("wiki/create", views.create, name="create"),
     path("wiki/<str:name>", views.entry, name="entry"),
     path("wiki/search/<str:query>", views.search, name="search"),
+    path("wiki/edit/<str:name>", views.edit, name="edit"),
 ]

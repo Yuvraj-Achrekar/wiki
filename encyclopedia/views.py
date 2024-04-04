@@ -46,9 +46,48 @@ def search(request,query):
         })
 
 def create(request):
+    entries = util.list_entries()
     if request.method == 'POST':
-        form = NewForm(request.Post)
-        return HttpResponse("post method")
+        form = NewForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            markdown_content = markdown(content)
+            if exist(title,entries):
+                return render(request,"encyclopedia/create.html",{"form": form,"error_message":"Entry already exist"})
+            else:
+                util.save_entry(title,markdown_content)
+                return HttpResponseRedirect(reverse("wiki:entry",args=[title]))
+        else:
+            return render(request,"encyclopedia/create.html",{"form": form})
     return render(request,"encyclopedia/create.html",{
         "form": NewForm()
+    })
+
+
+def exist(name,entries):
+    for entry in entries:
+        if entry.lower() == name.lower():
+            return True
+
+
+def edit(request,name):
+    content = util.get_entry(name)
+    if request.method == 'POST':
+        edited_form = NewForm(request.POST)
+        if edited_form.is_valid():
+            title = edited_form.cleaned_data["title"]
+            content = edited_form.cleaned_data["content"]
+            util.save_entry(title,content)
+            return HttpResponseRedirect(reverse("wiki:entry",args=[title]))
+    # Predefined data
+    predefined_data = {
+        'title': name,
+        'content': content
+    }
+    # Initialize the form with predefined data
+    form = NewForm(initial=predefined_data)
+    return render(request,"encyclopedia/edit.html",{
+        "name":name,
+        "form":form
     })

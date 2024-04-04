@@ -1,6 +1,6 @@
-{% extends "encyclopedia/layout.html" %} 
+{% extends "encyclopedia/layout.html" %}
 
-{% block title %} 
+{% block title %}
 {{name}}
 {% endblock %}
 
@@ -8,5 +8,7 @@
 <div>
     {{content | safe}}
 </div>
+<form action="{% url 'wiki:edit' name %}" method="get">
+    <button type="submit">Edit</button>
+</form>
 {% endblock %}
-
