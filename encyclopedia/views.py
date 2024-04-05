@@ -52,11 +52,10 @@ def create(request):
         if form.is_valid():
             title = form.cleaned_data["title"]
             content = form.cleaned_data["content"]
-            markdown_content = markdown(content)
             if exist(title,entries):
                 return render(request,"encyclopedia/create.html",{"form": form,"error_message":"Entry already exist"})
             else:
-                util.save_entry(title,markdown_content)
+                util.save_entry(title,content)
                 return HttpResponseRedirect(reverse("wiki:entry",args=[title]))
         else:
             return render(request,"encyclopedia/create.html",{"form": form})
@@ -69,6 +68,7 @@ def exist(name,entries):
     for entry in entries:
         if entry.lower() == name.lower():
             return True
+        return False
 
 
 def edit(request,name):
@@ -89,5 +89,11 @@ def edit(request,name):
     form = NewForm(initial=predefined_data)
     return render(request,"encyclopedia/edit.html",{
         "name":name,
-        "form":form
+        "form":form,
+        "cancel":cancel(name)
     })
+
+def cancel(name):
+    return HttpResponseRedirect(reverse("wiki:entry",args=[name]))
+
+

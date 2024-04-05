@@ -10,6 +10,7 @@ Edit
     <!-- {{csrf_token}} -->
     {% csrf_token %}
     {{form}}
-    <input type="submit" value="Submit">
+    <button onclick="{{cancel}}">Cancel</button>
+    <input type="submit" value="Save">
 </form>
 {% endblock %}
