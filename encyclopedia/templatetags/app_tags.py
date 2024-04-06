@@ -1,6 +1,4 @@
 from django import template
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 import random
 from .. import util
 
