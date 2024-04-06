@@ -26,7 +26,8 @@
                 <a href="{% url 'wiki:create' %}">Create New Page</a>
             </div>
             <div>
-                <a href="wiki/{% random_generator %}">Random Page</a>
+                {% random_generator as random_name %}
+                <a href="{% url 'wiki:entry' name=random_name %}">Random Page</a>
             </div>
             {% block nav %}
             {% endblock %}
